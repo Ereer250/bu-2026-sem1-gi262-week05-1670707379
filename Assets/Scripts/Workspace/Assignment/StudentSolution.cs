@@ -117,33 +117,157 @@ namespace Assignment
 
         public int[] AS01_SelectionSortDescending(int[] numbers)
         {
-            return numbers;
+            int[] result = (int[])numbers.Clone();
+
+            for (int i = 0; i < result.Length - 1; i++)
+            {
+                int maxIndex = i;
+
+                for (int j = i + 1; j < result.Length; j++)
+                {
+                    if (result[j] > result[maxIndex])
+                    {
+                        maxIndex = j;
+                    }
+                }
+
+                int temp = result[i];
+                result[i] = result[maxIndex];
+                result[maxIndex] = temp;
+            }
+
+            return result;
         }
+
 
         public int[] AS02_BubbleSortDescending(int[] numbers)
         {
-            return numbers;
+            int[] result = (int[])numbers.Clone();
+
+            for (int i = 0; i < result.Length - 1; i++)
+            {
+                for (int j = 0; j < result.Length - 1 - i; j++)
+                {
+                    if (result[j] < result[j + 1])
+                    {
+                        int temp = result[j];
+                        result[j] = result[j + 1];
+                        result[j + 1] = temp;
+                    }
+                }
+            }
+
+            return result;
         }
+
 
         public int[] AS03_InsertionSortDescending(int[] numbers)
         {
-            return numbers;
+            int[] result = (int[])numbers.Clone();
+
+            for (int i = 1; i < result.Length; i++)
+            {
+                int current = result[i];
+                int j = i - 1;
+
+                while (j >= 0 && result[j] < current)
+                {
+                    result[j + 1] = result[j];
+                    j--;
+                }
+
+                result[j + 1] = current;
+            }
+
+            return result;
         }
+
 
         public int AS04_FindTheSecondLargestNumber(int[] numbers)
         {
-            return 0;
+            int largest = numbers[0];
+            int secondLargest = numbers[0];
+            bool foundSecond = false;
+
+            for (int i = 1; i < numbers.Length; i++)
+            {
+                if (numbers[i] > largest)
+                {
+                    secondLargest = largest;
+                    largest = numbers[i];
+                    foundSecond = true;
+                }
+                else if (numbers[i] < largest)
+                {
+                    if (!foundSecond || numbers[i] > secondLargest)
+                    {
+                        secondLargest = numbers[i];
+                        foundSecond = true;
+                    }
+                }
+            }
+
+            return secondLargest;
         }
 
         #endregion
-
-        #region Extra
 
         public int EX01_FindLongestConsecutiveSequence(int[] numbers)
         {
-            return 0;
+            if (numbers == null || numbers.Length == 0)
+            {
+                return 0;
+            }
+
+            int[] sorted = (int[])numbers.Clone();
+
+            // Selection Sort
+            for (int i = 0; i < sorted.Length - 1; i++)
+            {
+                int minIndex = i;
+
+                for (int j = i + 1; j < sorted.Length; j++)
+                {
+                    if (sorted[j] < sorted[minIndex])
+                    {
+                        minIndex = j;
+                    }
+                }
+
+                int temp = sorted[i];
+                sorted[i] = sorted[minIndex];
+                sorted[minIndex] = temp;
+            }
+
+            int longest = 1;
+            int current = 1;
+
+            for (int i = 1; i < sorted.Length; i++)
+            {
+                // ข้ามค่าที่ซ้ำ
+                if (sorted[i] == sorted[i - 1])
+                {
+                    continue;
+                }
+
+                // ตัวเลขต่อเนื่องกัน
+                if ((long)sorted[i] == (long)sorted[i - 1] + 1)
+                {
+                    current++;
+
+                    if (current > longest)
+                    {
+                        longest = current;
+                    }
+                }
+                else
+                {
+                    current = 1;
+                }
+            }
+
+            return longest;
         }
 
-        #endregion
     }
 }
